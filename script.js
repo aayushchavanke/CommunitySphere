@@ -2,7 +2,7 @@ let isUserLoggedIn = false;
 let currentUser = null;
 let currentUserFullName = null;
 
-const API_URL = 'backend';
+const API_URL = '/backend';
 
 async function checkAuthStatus() {
     try {
@@ -209,3 +209,4 @@ function scrollToClubs() {
 document.addEventListener('DOMContentLoaded', async () => {
     await checkAuthStatus();
 });
+
