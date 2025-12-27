@@ -2,13 +2,12 @@ let isUserLoggedIn = false;
 let currentUser = null;
 let currentUserFullName = null;
 
-const API_URL = '/backend';
-
 async function checkAuthStatus() {
     try {
-        const response = await fetch(`${API_URL}/auth_status.php`, {
+        const response = await fetch('/auth_status.php', {
             credentials: 'include'
         });
+
         const data = await response.json();
 
         if (data.success && data.logged_in) {
@@ -27,13 +26,15 @@ async function checkAuthStatus() {
 
         updateAuthUI();
     } catch (error) {
-        console.error(error);
+        console.error('Auth check failed:', error);
     }
 }
 
 function toggleTheme() {
     document.body.classList.toggle('light-mode');
     const themeButton = document.querySelector('.theme-toggle');
+    if (!themeButton) return;
+
     themeButton.textContent = document.body.classList.contains('light-mode')
         ? '🌙 Toggle Theme'
         : '☀️ Toggle Theme';
@@ -49,7 +50,7 @@ function closeModal(modalId) {
     if (modal) modal.style.display = 'none';
 }
 
-window.onclick = function(event) {
+window.onclick = function (event) {
     if (event.target.classList.contains('modal')) {
         event.target.style.display = 'none';
     }
@@ -58,10 +59,10 @@ window.onclick = function(event) {
 async function handleSignup(event) {
     event.preventDefault();
 
-    const name = document.getElementById('signupName').value.trim();
-    const prn = document.getElementById('signupPRN').value.trim();
-    const email = document.getElementById('signupEmail').value.trim();
-    const password = document.getElementById('signupPassword').value;
+    const name = document.getElementById('signupName')?.value.trim();
+    const prn = document.getElementById('signupPRN')?.value.trim();
+    const email = document.getElementById('signupEmail')?.value.trim();
+    const password = document.getElementById('signupPassword')?.value;
 
     const prnError = document.getElementById('prnError');
     const emailError = document.getElementById('emailError');
@@ -73,7 +74,7 @@ async function handleSignup(event) {
         return;
     }
 
-    if (!email.includes('@gst.sies.edu.in')) {
+    if (!email || !email.endsWith('@gst.sies.edu.in')) {
         if (emailError) {
             emailError.textContent = 'Please use your college email (@gst.sies.edu.in)';
             emailError.style.display = 'block';
@@ -81,7 +82,7 @@ async function handleSignup(event) {
         return;
     }
 
-    if (prn.length < 5) {
+    if (!prn || prn.length < 5) {
         if (prnError) {
             prnError.textContent = 'Please enter a valid PRN';
             prnError.style.display = 'block';
@@ -90,7 +91,7 @@ async function handleSignup(event) {
     }
 
     try {
-        const response = await fetch(`${API_URL}/register.php`, {
+        const response = await fetch('/register.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -105,18 +106,18 @@ async function handleSignup(event) {
             document.getElementById('signupForm')?.reset();
             window.location.reload();
         } else {
-            if (data.message.includes('email') && emailError) {
+            if (data.message?.toLowerCase().includes('email') && emailError) {
                 emailError.textContent = data.message;
                 emailError.style.display = 'block';
-            } else if (data.message.includes('PRN') && prnError) {
+            } else if (data.message?.toLowerCase().includes('prn') && prnError) {
                 prnError.textContent = data.message;
                 prnError.style.display = 'block';
             } else {
-                alert(data.message);
+                alert(data.message || 'Signup failed');
             }
         }
     } catch (error) {
-        console.error(error);
+        console.error('Signup error:', error);
         alert('An error occurred. Please try again.');
     }
 }
@@ -124,12 +125,12 @@ async function handleSignup(event) {
 async function handleLogin(event) {
     event.preventDefault();
 
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
+    const email = document.getElementById('loginEmail')?.value.trim();
+    const password = document.getElementById('loginPassword')?.value;
     const loginEmailError = document.getElementById('loginEmailError');
     if (loginEmailError) loginEmailError.style.display = 'none';
 
-    if (!email.includes('@gst.sies.edu.in')) {
+    if (!email || !email.endsWith('@gst.sies.edu.in')) {
         if (loginEmailError) {
             loginEmailError.textContent = 'Please use a valid college email';
             loginEmailError.style.display = 'block';
@@ -138,7 +139,7 @@ async function handleLogin(event) {
     }
 
     try {
-        const response = await fetch(`${API_URL}/login.php`, {
+        const response = await fetch('/login.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -153,11 +154,11 @@ async function handleLogin(event) {
             document.getElementById('loginForm')?.reset();
             window.location.reload();
         } else if (loginEmailError) {
-            loginEmailError.textContent = data.message;
+            loginEmailError.textContent = data.message || 'Login failed';
             loginEmailError.style.display = 'block';
         }
     } catch (error) {
-        console.error(error);
+        console.error('Login error:', error);
         alert('An error occurred. Please try again.');
     }
 }
@@ -167,7 +168,9 @@ function updateAuthUI() {
     if (!authButtons) return;
 
     authButtons.innerHTML = isUserLoggedIn
-        ? `<span style="color: var(--accent-cyan); font-weight: 600; margin-right: 0.5rem;">Hi, ${currentUserFullName || currentUser}!</span>
+        ? `<span style="color: var(--accent-cyan); font-weight: 600; margin-right: 0.5rem;">
+              Hi, ${currentUserFullName || currentUser}!
+           </span>
            <button class="btn btn-login" onclick="handleLogout()">Logout</button>`
         : `<button class="btn btn-login" onclick="openModal('loginModal')">Login</button>
            <button class="btn btn-signup" onclick="openModal('signupModal')">Sign Up</button>`;
@@ -175,16 +178,17 @@ function updateAuthUI() {
 
 async function handleLogout() {
     try {
-        const response = await fetch(`${API_URL}/logout.php`, {
+        const response = await fetch('/logout.php', {
             credentials: 'include'
         });
+
         const data = await response.json();
         if (data.success) {
             alert('You have been logged out successfully.');
             window.location.href = 'index.html';
         }
     } catch (error) {
-        console.error(error);
+        console.error('Logout error:', error);
     }
 }
 
@@ -193,6 +197,7 @@ let currentSlide = 0;
 function changeSlide() {
     const slides = document.querySelectorAll('.hero-slide');
     if (!slides.length) return;
+
     slides[currentSlide].classList.remove('active');
     currentSlide = (currentSlide + 1) % slides.length;
     slides[currentSlide].classList.add('active');
@@ -206,7 +211,6 @@ function scrollToClubs() {
     document.getElementById('clubs')?.scrollIntoView({ behavior: 'smooth' });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    await checkAuthStatus();
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuthStatus();
 });
-
