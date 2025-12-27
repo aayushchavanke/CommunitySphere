@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CommunitySphere - College Community Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <nav class="navbar">
+            <div class="logo-section">
+                <div class="logo">CC</div>
+                <h1 class="college-name">CommunitySphere</h1>
+            </div>
+            <div class="nav-right">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙 Toggle Theme</button>
+                <div class="auth-buttons">
+                    <button class="btn btn-login" onclick="openModal('loginModal')">Login</button>
+                    <button class="btn btn-signup" onclick="openModal('signupModal')">Sign Up</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="hero-slide active">
+                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&h=1080&fit=crop" alt="Community Event">
+            </div>
+            <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1920&h=1080&fit=crop" alt="Tech Event">
+            </div>
+            <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1920&h=1080&fit=crop" alt="Student Gathering">
+            </div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Join Your Campus Community</h1>
+            <p class="hero-tagline">Discover clubs, make connections, and create unforgettable experiences</p>
+            <button class="btn-cta" onclick="scrollToClubs()">Explore Clubs</button>
+        </div>
+    </section>
+
+    <!-- ===== LOGIN MODAL ===== -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2 class="form-title">Welcome Back!</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">College Email</label>
+                    <input type="email" id="loginEmail" placeholder="your.prn@gst.sies.edu.in" required>
+                    <span class="error-message" id="loginEmailError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== SIGNUP MODAL ===== -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2 class="form-title">Join Our Community!</h2>
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPRN">College PRN</label>
+                    <input type="text" id="signupPRN" placeholder="Enter your PRN" required>
+                    <span class="error-message" id="prnError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">College Email</label>
+                    <input type="email" id="signupEmail" placeholder="your.prn@gst.sies.edu.in" required>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password" required>
+                </div>
+                <button type="submit" class="btn btn-submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== INFO SECTION ===== -->
+    <section class="info-section">
+        <div class="info-container">
+            <h2 class="section-title">Why Join CommunitySphere?</h2>
+            <p class="section-subtitle">Unlock your potential through community engagement</p>
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-card-icon">🌟</div>
+                    <h3>Vibrant Communities</h3>
+                    <p>Connect with students who share your passions. Our diverse community brings together brilliant minds from all disciplines to collaborate, learn, and grow together.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">🎯</div>
+                    <h3>Skill Development</h3>
+                    <p>Clubs aren't just fun—they're platforms for growth. Develop leadership, technical, creative, and interpersonal skills that will set you apart in your career.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">🚀</div>
+                    <h3>Career Opportunities</h3>
+                    <p>Build your network, gain real-world experience, and enhance your resume. Many students find internships and jobs through club connections and activities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CLUBS SECTION ===== -->
+    <section class="clubs-section" id="clubs">
+        <div class="clubs-container">
+            <h2 class="section-title">Explore Our Clubs</h2>
+            <p class="section-subtitle">Find your tribe and make your mark</p>
+
+            <div class="clubs-grid">
+                <!-- Technical Club -->
+                <div class="club-card">
+                    <div class="club-image-container">
+                        <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=600&fit=crop" alt="Technical Club">
+                        <div class="club-overlay">
+                            <p class="club-overlay-text">Build amazing projects with cutting-edge tech</p>
+                        </div>
+                    </div>
+                    <div class="club-content">
+                        <h4 class="club-name">Technical Club</h4>
+                        <p class="club-description">Master coding, robotics, AI, web development, and design. Join hackathons, build real-world projects, and explore the latest in technology and innovation.</p>
+                        <a href="technical.html"><button class="btn-club">Explore Club</button></a>
+                    </div>
+                </div>
+
+                <!-- Cultural Club -->
+                <div class="club-card">
+                    <div class="club-image-container">
+                        <img src="https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&h=600&fit=crop" alt="Cultural Club">
+                        <div class="club-overlay">
+                            <p class="club-overlay-text">Express yourself through arts and culture</p>
+                        </div>
+                    </div>
+                    <div class="club-content">
+                        <h4 class="club-name">Cultural Club</h4>
+                        <p class="club-description">Explore drama, music, dance, and all forms of artistic expression. Perform at events, participate in competitions, and showcase your creative talents.</p>
+                        <a href="cultural.html"><button class="btn-club">Explore Club</button></a>
+                    </div>
+                </div>
+
+                <!-- Sports Club -->
+                <div class="club-card">
+                    <div class="club-image-container">
+                        <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&h=600&fit=crop" alt="Sports Club">
+                        <div class="club-overlay">
+                            <p class="club-overlay-text">Train hard and compete at the highest level</p>
+                        </div>
+                    </div>
+                    <div class="club-content">
+                        <h4 class="club-name">Sports Club</h4>
+                        <p class="club-description">Play football, cricket, badminton, basketball, and more. Train with professional coaches, compete in tournaments, and represent your college with pride.</p>
+                        <a href="sports.html"><button class="btn-club">Explore Club</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>Made with ❤️ by <span class="footer-gradient">Parth, Aayush, and Lokesh</span></p>
+        <p style="margin-top: 0.8rem; font-size: 0.9rem; opacity: 0.7;">© 2024 CommunitySphere. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
