@@ -1,3 +1,6 @@
+## Cloud Architecture
+
+```mermaid
 graph TD
     %% External Elements
     Users((Internet))
@@ -27,7 +30,6 @@ graph TD
                     EC2_B[EC2 Instance B <br/> Apache/PHP]
                 end
                 subgraph Priv2 [Private Subnet 2]
-                    %% Represents the isolated backend space
                     Isolated[Isolated Backend]
                     style Isolated fill:none,stroke:none
                 end
